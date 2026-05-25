@@ -1,0 +1,29 @@
+<h2>Add Entity</h2>
+
+<div>
+
+  <input
+    type="text"
+    placeholder="Name"
+    [(ngModel)]="entity.name"
+  />
+
+</div>
+
+<br>
+
+<div>
+
+  <input
+    type="text"
+    placeholder="Description"
+    [(ngModel)]="entity.description"
+  />
+
+</div>
+
+<br>
+
+<button (click)="addEntity()">
+  Add Entity
+</button>

@@ -1,0 +1,89 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <h2 class="text-success mb-3">
+    {{ adminMode ? 'All Orders (Admin)' : 'My Orders' }}
+  </h2>
+
+  <div *ngIf="loading" class="text-center text-muted py-4">Loading...</div>
+
+  <div *ngIf="!loading && orders.length === 0" class="alert alert-info">
+    No orders found.
+  </div>
+
+  <div class="card mb-3 shadow-sm" *ngFor="let o of orders">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-2">
+        <div>
+          <h5 class="mb-0">{{ o.orderNumber || 'Order #' + o.id }}</h5>
+          <small class="text-muted">
+            Placed {{ o.orderDate | date: 'medium' }}
+            <span *ngIf="o.estimatedDeliveryDate">
+              · ETA {{ o.estimatedDeliveryDate | date: 'mediumDate' }}
+            </span>
+          </small>
+        </div>
+        <div>
+          <span class="badge"
+                [ngClass]="{
+                  'bg-warning text-dark': o.status === 'Pending',
+                  'bg-info': o.status === 'Confirmed',
+                  'bg-success': o.status === 'Delivered'
+                }">
+            {{ o.status }}
+          </span>
+        </div>
+      </div>
+
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Medicine</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of o.items">
+            <td>{{ item.medicine?.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.unitPrice }}</td>
+            <td>₹{{ item.totalPrice }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <a *ngIf="o.prescriptionFile"
+             [href]="prescriptionUrl(o.prescriptionFile)"
+             target="_blank"
+             class="btn btn-sm btn-outline-secondary">
+            View Prescription
+          </a>
+        </div>
+        <div class="text-end">
+          <div *ngIf="o.discountAmount > 0">
+            <small class="text-muted">
+              Subtotal: ₹{{ o.totalAmount }} · Discount:
+              <span class="text-success">- ₹{{ o.discountAmount }}</span>
+            </small>
+          </div>
+          <span class="fw-bold me-3">Final: ₹{{ o.finalAmount || o.totalAmount }}</span>
+
+          <ng-container *ngIf="adminMode">
+            <div class="btn-group btn-group-sm mt-2">
+              <button class="btn btn-outline-info"
+                      (click)="changeStatus(o, 'Confirmed')"
+                      [disabled]="o.status === 'Confirmed'">Confirm</button>
+              <button class="btn btn-outline-success"
+                      (click)="changeStatus(o, 'Delivered')"
+                      [disabled]="o.status === 'Delivered'">Deliver</button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

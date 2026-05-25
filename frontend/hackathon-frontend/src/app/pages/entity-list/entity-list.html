@@ -1,0 +1,19 @@
+<h2>Entities</h2>
+
+<table border="1" cellpadding="10">
+
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+  </tr>
+
+  <tr *ngFor="let entity of entities">
+
+    <td>{{ entity.id }}</td>
+    <td>{{ entity.name }}</td>
+    <td>{{ entity.description }}</td>
+
+  </tr>
+
+</table>

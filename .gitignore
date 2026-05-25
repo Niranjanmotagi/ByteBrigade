@@ -1,0 +1,42 @@
+# Build output
+**/bin/
+**/obj/
+**/dist/
+**/out-tsc/
+**/tmp/
+
+# Dependencies and package caches
+**/node_modules/
+**/.angular/cache/
+npm-debug.log
+yarn-error.log
+
+# Stray lockfiles outside the real Angular project
+/package-lock.json
+/frontend/package-lock.json
+
+# Local runtime/demo output
+**/wwwroot/prescriptions/
+**/wwwroot/emails/
+wwwroot/
+
+# User-specific IDE files
+.vs/
+.idea/
+**/.vscode/
+**/.claude/
+**/.cursor/
+**/.gemini/
+**/.junie/
+**/.windsurf/
+*.user
+*.suo
+*.sublime-workspace
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local backup of the nested Angular repo metadata, kept out of the root repo
+frontend/hackathon-frontend/.git.frontend-backup/
