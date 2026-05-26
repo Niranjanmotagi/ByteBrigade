@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+
+<div class="container" style="max-width: 560px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-success mb-3">Create Customer Account</h3>
+
+      <div *ngIf="error" class="alert alert-danger py-2">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-success py-2">{{ success }}</div>
+
+      <form (ngSubmit)="register()">
+        <div class="row">
+          <div class="col mb-2">
+            <label class="form-label">First Name</label>
+            <input class="form-control" name="firstName" [(ngModel)]="firstName" />
+          </div>
+          <div class="col mb-2">
+            <label class="form-label">Last Name</label>
+            <input class="form-control" name="lastName" [(ngModel)]="lastName" />
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" [(ngModel)]="email" />
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Phone Number</label>
+          <input class="form-control" name="phoneNumber" [(ngModel)]="phoneNumber" />
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Username <span class="text-danger">*</span></label>
+          <input class="form-control" name="username" [(ngModel)]="username" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password <span class="text-danger">*</span></label>
+          <input type="password" class="form-control" name="password" [(ngModel)]="password" required />
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Register</button>
+      </form>
+
+      <p class="mt-3 mb-0 text-center">
+        Already registered? <a routerLink="/login">Login</a>
+      </p>
+    </div>
+  </div>
+</div>

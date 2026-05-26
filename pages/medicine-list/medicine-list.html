@@ -1,0 +1,171 @@
+<app-navbar></app-navbar>
+
+<!-- Hero -->
+<section class="bg-success bg-gradient text-white py-4 mb-4">
+  <div class="container">
+    <div class="row align-items-center g-3">
+      <div class="col-md-8">
+        <h1 class="fw-bold mb-1">Browse Medicines</h1>
+        <p class="mb-0 opacity-75">
+          Search and filter through our wide range of medicines — tablets,
+          syrups, vitamins and more, delivered to your doorstep.
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <span class="badge bg-light text-success fs-6 px-3 py-2">
+          {{ medicines.length }} medicines available
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container pb-5">
+  <!-- Filters -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label small text-muted mb-1">Search</label>
+          <input
+            class="form-control"
+            placeholder="Name, composition, or category"
+            [(ngModel)]="search"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small text-muted mb-1">Category</label>
+          <select class="form-select" [(ngModel)]="selectedCategory">
+            <option value="">All categories</option>
+            <option *ngFor="let c of categories()" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small text-muted mb-1">Dosage</label>
+          <select class="form-select" [(ngModel)]="selectedDosage">
+            <option value="">All</option>
+            <option *ngFor="let d of dosageForms()" [value]="d">{{ d }}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small text-muted mb-1">Packaging</label>
+          <select class="form-select" [(ngModel)]="selectedPackaging">
+            <option value="">All</option>
+            <option *ngFor="let p of packagingTypes()" [value]="p">
+              {{ p }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <button
+            class="btn btn-outline-secondary w-100"
+            (click)="resetFilters()"
+            title="Reset filters"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert alert-success py-2">{{ message }}</div>
+  <div *ngIf="loading" class="text-center text-muted py-5">
+    <div class="spinner-border text-success" role="status"></div>
+    <div class="mt-2">Loading medicines...</div>
+  </div>
+
+  <div
+    *ngIf="!loading && filtered().length === 0"
+    class="text-center text-muted py-5"
+  >
+    <h5>No medicines found.</h5>
+    <p>Try changing your search or filters.</p>
+  </div>
+
+  <!-- Medicine Cards -->
+  <div class="row g-3">
+    <div class="col-md-6 col-lg-4" *ngFor="let med of filtered()">
+      <div class="card h-100 shadow-sm border-0">
+        <div
+          class="position-relative bg-light d-flex align-items-center justify-content-center"
+          style="height: 180px; overflow: hidden;"
+        >
+          <img
+            *ngIf="med.imageUrl"
+            [src]="med.imageUrl"
+            class="card-img-top h-100 w-100"
+            style="object-fit: cover;"
+            alt="{{ med.name }}"
+          />
+          <span *ngIf="!med.imageUrl" class="display-4 text-success">💊</span>
+
+          <span
+            *ngIf="med.requiresPrescription"
+            class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark"
+          >
+            Rx Required
+          </span>
+        </div>
+
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <h5 class="card-title mb-0">{{ med.name }}</h5>
+            <span class="fw-bold text-success ms-2">₹{{ med.price }}</span>
+          </div>
+          <small class="text-muted d-block mb-2">
+            {{ med.category }} · {{ med.dosageForm }} · {{ med.strength }}
+          </small>
+
+          <p class="card-text small text-muted mb-2">
+            {{ med.manufacturer }}
+          </p>
+
+          <p class="card-text small flex-grow-1">
+            {{ med.description }}
+          </p>
+
+          <div *ngIf="showDetailsId === med.id" class="small bg-light p-2 rounded mb-2">
+            <div><strong>Composition:</strong> {{ med.composition }}</div>
+            <div><strong>Packaging:</strong> {{ med.packagingType }}</div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span
+              class="badge"
+              [ngClass]="med.stockQuantity > 10 ? 'bg-success-subtle text-success' : (med.stockQuantity > 0 ? 'bg-warning-subtle text-warning' : 'bg-danger-subtle text-danger')"
+            >
+              {{ med.stockQuantity > 0 ? med.stockQuantity + ' in stock' : 'Out of stock' }}
+            </span>
+            <button
+              type="button"
+              class="btn btn-link btn-sm p-0 text-decoration-none"
+              (click)="toggleDetails(med.id)"
+            >
+              {{ showDetailsId === med.id ? 'Hide details' : 'View details' }}
+            </button>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button
+              *ngIf="!auth.isAdmin()"
+              class="btn btn-success btn-sm flex-grow-1"
+              [disabled]="med.stockQuantity <= 0"
+              (click)="addToCart(med)"
+            >
+              Add to Cart
+            </button>
+
+            <button
+              *ngIf="auth.isAdmin()"
+              class="btn btn-outline-danger btn-sm flex-grow-1"
+              (click)="delete(med)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

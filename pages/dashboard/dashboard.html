@@ -1,0 +1,62 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="p-4 mb-4 bg-light rounded-3 border">
+    <h1 class="display-6">Welcome, {{ auth.getUsername() }} 👋</h1>
+    <p class="lead mb-0">
+      You are signed in as <b>{{ auth.getRole() }}</b>.
+    </p>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Browse Medicines</h5>
+          <p class="card-text">View the full catalog of medicines available in store.</p>
+          <a routerLink="/medicines" class="btn btn-success">Browse</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" *ngIf="!auth.isAdmin()">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">My Cart</h5>
+          <p class="card-text">Review items in your cart and place an order.</p>
+          <a routerLink="/cart" class="btn btn-outline-success">Open Cart</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" *ngIf="!auth.isAdmin()">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">My Orders</h5>
+          <p class="card-text">Track your previous and pending orders.</p>
+          <a routerLink="/orders" class="btn btn-outline-success">View Orders</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" *ngIf="auth.isAdmin()">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Add / Manage Medicine</h5>
+          <p class="card-text">Create new medicines or update inventory.</p>
+          <a routerLink="/add-medicine" class="btn btn-outline-success">Add Medicine</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" *ngIf="auth.isAdmin()">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">All Orders</h5>
+          <p class="card-text">Review and update the status of customer orders.</p>
+          <a routerLink="/admin-orders" class="btn btn-outline-success">Admin Orders</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
